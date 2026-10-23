@@ -33,6 +33,8 @@ nav a{flex:1;text-align:center;padding:7px 0;font-size:10.5px;color:var(--m);cur
 #md{display:none;position:fixed;inset:0;background:#2d2a3399;align-items:flex-end;z-index:9}#md.on{display:flex}
 .sh{background:#fff;width:100%;max-height:90vh;overflow:auto;padding:18px;border-radius:20px 20px 0 0;max-width:640px;margin:auto}
 pre{white-space:pre-wrap;font:13px ui-monospace,monospace;background:var(--soft);padding:12px;border-radius:12px}
+.dg{border:2px solid #dc2626;background:#fef2f2}.dg h3{color:#b91c1c;margin-top:0}button.rd{background:#dc2626;color:#fff;border:0;font-weight:700;margin:5px 6px 5px 0}
+.ad{display:flex;align-items:center;justify-content:center;gap:12px;margin:30px auto 8px;max-width:440px;padding:8px 14px;background:#ffffffb8;border:1px solid var(--b);border-radius:16px;color:var(--ink);text-decoration:none}.ad img{height:54px;width:auto}.ad b{display:block;font-size:13px}.ad span{font-size:11px;color:var(--pd)}
 @media(min-width:900px){
  body{padding:0 0 0 210px}main{max-width:1100px;padding:24px}header{padding-left:24px}
  nav{top:0;bottom:0;right:auto;width:210px;flex-direction:column;border-top:0;border-right:1px solid var(--b);padding:76px 10px 10px}
@@ -160,16 +162,29 @@ V.apps=()=>`<h2>Aplicaciones</h2><p class=m>Herramientas extra de Me Mata Limón
 
 /* ---------- Más ---------- */
 V.more=()=>{const ok=S.mod<=bk;return `<h2>Más</h2><div class=gl><div class=card><h3 style="margin-top:0">Copia de seguridad</h3><p class=m>${ok?'✓ Todo está guardado en tu archivo.':'Hay cambios sin guardar en archivo.'} ${fh?'Se actualiza solo en cada cambio.':'Con la primera venta del día se baja una copia sola a Descargas.'}</p><button class=p onclick=backup()>Guardar copia en archivo</button><button onclick=imp()>Cargar copia</button></div>
-<div class=card><h3 style="margin-top:0">Gestión</h3><button onclick="tab='buy';render()">Compras</button><button onclick="tab='hist';render()">Historial de ventas</button><button onclick=cfg()>Datos del negocio</button></div></div>`};
+<div class=card><h3 style="margin-top:0">Gestión</h3><button onclick="tab='buy';render()">Compras</button><button onclick="tab='hist';render()">Historial de ventas</button><button onclick=cfg()>Datos del negocio</button></div></div><div class="card dg"><h3>⚠️ ZONA DE PELIGRO</h3><p class=m>Estas acciones no se pueden deshacer. Antes de usarlas, guardá una copia de tus datos.</p><button class=rd onclick=delFile()>🗑️ Borrar el archivo de copia (.json)</button><button class=rd onclick=reset()>⛔ Resetear todo y empezar de cero</button></div>`};
 function cfg(){form('Datos del negocio',[{k:'biz',l:'Nombre',v:S.biz},{k:'cur',l:'Moneda',v:S.cur}],v=>{S.biz=v.biz||S.biz;S.cur=v.cur||'$';save();render()})}
 V.hist=()=>`<h2>Historial de ventas</h2><button onclick="tab='more';render()">← Volver</button><div class=gl>${S.sales.slice(0,80).map(s=>row(null,'N° '+String(s.n).padStart(6,'0'),s.d.replace('T',' ')+' · '+s.m,`<b>${M(s.tot)}</b>`,`rcpt(S.sales.find(x=>x.id=='${s.id}'))`)).join('')||'<p class=m>Sin ventas todavía.</p>'}</div>`;
 V.buy=()=>`<h2>Compras</h2><button onclick="tab='more';render()">← Volver</button><button class=p onclick=bf()>+ Registrar compra</button><div class=gl>${S.buys.slice(0,80).map(b=>row(null,b.pn+' ×'+b.q,b.d.replace('T',' ')+' · '+(b.s||'Sin proveedor'),M(b.q*b.co))).join('')||'<p class=m>Sin compras registradas.</p>'}</div>`;
 function bf(){if(!S.prod.length)return alert('Primero cargá productos.');form('Registrar compra',[{k:'p',l:'Producto',t:'select',v:'',o:S.prod.map(p=>[p.id,p.n])},{k:'q',l:'Cantidad',t:'number',v:1},{k:'co',l:'Costo por unidad',t:'number',v:0},{k:'s',l:'Proveedor'}],v=>{if(v.q<=0)return false;const p=S.prod.find(x=>x.id==v.p);p.st+=v.q;if(v.co)p.co=v.co;S.buys.unshift({id:id(),d:now(),p:p.id,pn:p.n,q:v.q,co:v.co,s:v.s});save();render()})}
 
+/* ---------- Zona de peligro ---------- */
+async function delFile(){
+  if(!fh)return alert('No hay un archivo enlazado a la app, así que no puedo borrarlo. Por seguridad, los navegadores no dejan que una web borre archivos de Descargas o del celular: borralo a mano desde tu app de Archivos o la carpeta Descargas. Si usás Chrome en PC y tocás "Guardar copia en archivo", la app queda enlazada a ese archivo y desde acá sí se puede borrar.');
+  if(!confirm('¿Borrar el archivo de copia enlazado? Tus datos siguen en este navegador, pero ya no tendrás copia en archivo.'))return;
+  try{if(await fh.requestPermission({mode:'readwrite'})!='granted')return;await fh.remove();fh=null;bk=0;await idb('readwrite','fh',null);await idb('readwrite','bk',0);alert('El archivo se borró.');render()}
+  catch(e){alert('Tu navegador no permitió borrar el archivo. Borralo a mano desde la carpeta donde lo guardaste.')}}
+async function reset(){
+  if(!confirm('⚠️ Esto borra TODOS los datos de este dispositivo: productos, fotos, clientes, ventas, compras y turnos.\n\nSi no tenés una copia en archivo, no se pueden recuperar. Te recomendamos tocar antes "Guardar copia en archivo".\n\n¿Querés seguir?'))return;
+  if((prompt('Para confirmar, escribí la palabra BORRAR')||'').trim().toUpperCase()!='BORRAR')return alert('No se borró nada.');
+  for(const k of['s','fh','bk','ad'])await idb('readwrite',k,null);
+  S=null;fh=null;bk=0;ad='';cart=nc();tab='home';render()}
+const AD='<a class=ad href="https://mematalimon.com.ar" target=_blank rel=noopener><img src="logo.png" alt="Me Mata Limón"><div><b>Venta de accesorios varios, mirá nuestra WEB!</b><span>mematalimon.com.ar</span></div></a>';
+
 /* ---------- Render ---------- */
 function render(){const a=$('#app');if(!S)return a.innerHTML=setup();
   const T=[['home','🏠','Inicio'],['sell','🛒','Vender'],['prod','📦','Productos'],['cli','👥','Clientes'],['tur','📅','Turnos'],['apps','🧩','Apps'],['more','☰','Más']],base=['buy','hist'].includes(tab)?'more':tab;
-  a.innerHTML=`<header><div class=lg>${esc(S.biz[0]||'M').toUpperCase()}</div><div><h1>${esc(S.biz)}</h1><p>Ventas, stock, clientes y turnos</p></div></header><main>${tab=='apps'?'':banner()}${V[tab]()}</main><nav>${T.map(t=>`<a class="${t[0]==base?'on':''}" onclick="tab='${t[0]}';render()"><span>${t[1]}</span>${t[2]}</a>`).join('')}</nav>`;
+  a.innerHTML=`<header><div class=lg>${esc(S.biz[0]||'M').toUpperCase()}</div><div><h1>${esc(S.biz)}</h1><p>Ventas, stock, clientes y turnos</p></div></header><main>${tab=='apps'?'':banner()}${V[tab]()}${AD}</main><nav>${T.map(t=>`<a class="${t[0]==base?'on':''}" onclick="tab='${t[0]}';render()"><span>${t[1]}</span>${t[2]}</a>`).join('')}</nav>`;
   if(tab=='sell')upd()}
 (async()=>{try{S=await idb('readonly','s');fh=await idb('readonly','fh');bk=await idb('readonly','bk')||0;ad=await idb('readonly','ad')||'';navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}render()})();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
