@@ -1,67 +1,81 @@
 <!DOCTYPE html>
 <html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#14213d"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png">
-<title>Mi Negocio</title>
+<meta name="theme-color" content="#a88cd7"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png">
+<title>Mi Negocio · Me Mata Limón</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#eef1f5;--c:#fff;--t:#14213d;--m:#5f6b80;--a:#14213d;--o:#e07a00;--b:#d9dee7;--r:#c0392b;padding-top:env(safe-area-inset-top)}
-@media(prefers-color-scheme:dark){:root{--bg:#0f1521;--c:#19223a;--t:#e8ecf4;--m:#97a3ba;--a:#f2b45c;--o:#f2b45c;--b:#2b3652;--r:#f28b82}}
-*{box-sizing:border-box}body{margin:0;font:15px system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--t);padding-bottom:80px}
-h2{margin:.3em 0 .6em;font-size:22px}h3{margin:1.1em 0 .4em;font-size:16px}
-main{padding:12px;max-width:640px;margin:auto}
-input,select,button{font:inherit;padding:11px;border-radius:10px;border:1px solid var(--b);background:var(--c);color:var(--t);width:100%;margin:4px 0}
-button{cursor:pointer;width:auto;margin-right:6px;font-weight:600}button.p{background:var(--a);color:var(--bg);border:0}
-button.d{color:var(--r)}
-.r{display:flex;align-items:center;gap:10px;background:var(--c);border:1px solid var(--b);border-radius:10px;padding:10px;margin:6px 0}
-.r>div{flex:1;min-width:0}.r img,.ph{width:48px;height:48px;border-radius:8px;object-fit:cover;background:var(--b)}
+:root{--pr:#a88cd7;--pd:#8e66cf;--ink:#2d2a33;--soft:#f3eef9;--b:rgba(168,140,215,.2);--m:#6b7280;--r:#ef4444;--sh:0 8px 28px rgba(115,90,160,.12)}
+*{box-sizing:border-box}
+body{margin:0;font:15px Inter,system-ui,sans-serif;color:var(--ink);background:linear-gradient(160deg,#f8f5fc 0%,#efe8f8 50%,#f5f0fa 100%);background-attachment:fixed;min-height:100vh;padding-bottom:84px}
+h1,h2{font-family:'Playfair Display',serif;color:var(--pd)}h2{margin:.2em 0 .6em;font-size:24px}h3{margin:1.1em 0 .4em;font-size:15px;color:var(--pd)}
+header{position:sticky;top:0;z-index:5;background:#fffe;backdrop-filter:blur(8px);border-bottom:1px solid var(--b);padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top));display:flex;gap:12px;align-items:center}
+header h1{margin:0;font-size:18px;line-height:1.1}header p{margin:0;font-size:11px;color:var(--m)}
+.lg{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--pr),var(--pd));color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+main{padding:14px;max-width:700px;margin:auto}
+input,select,button{font:inherit;padding:11px;border-radius:12px;border:1px solid var(--b);background:#fff;color:var(--ink);width:100%;margin:4px 0}
+input:focus,select:focus{outline:2px solid var(--pr)}
+button{cursor:pointer;width:auto;margin-right:6px;font-weight:600;color:var(--pd);border-color:var(--pr)}
+button.p{background:linear-gradient(135deg,var(--pr),var(--pd));color:#fff;border:0}button.d{color:var(--r);border-color:var(--r)}
+.card,.r{background:#fff;border:1px solid var(--b);border-radius:16px;box-shadow:var(--sh);padding:14px;margin:8px 0}
+.r{display:flex;align-items:center;gap:10px;padding:10px;color:inherit;text-decoration:none;cursor:pointer}
+.r>div{flex:1;min-width:0}.r img,.ph{width:48px;height:48px;border-radius:10px;object-fit:cover;background:var(--soft)}
+.em{font-size:28px;width:44px;text-align:center}.ap .m{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .m{color:var(--m);font-size:13px}.red{color:var(--r)}.s{text-align:right;white-space:nowrap}
-.g{display:grid;grid-template-columns:1fr 1fr;gap:8px}.k{background:var(--c);border-left:4px solid var(--o);border-radius:6px;padding:12px}.k b{display:block;font-size:20px}
-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--c);border-top:1px solid var(--b);padding-bottom:env(safe-area-inset-bottom)}
-nav a{flex:1;text-align:center;padding:8px 0;font-size:11px;color:var(--m)}nav a.on{color:var(--a);font-weight:700}nav span{display:block;font-size:20px}
-#md{display:none;position:fixed;inset:0;background:#0008;align-items:flex-end;z-index:9}#md.on{display:flex}
-.sh{background:var(--bg);width:100%;max-height:90vh;overflow:auto;padding:16px;border-radius:16px 16px 0 0;max-width:640px;margin:auto}
-.bn{background:var(--o);color:#fff;padding:10px;text-align:center;font-size:13px;font-weight:600}
-pre{white-space:pre-wrap;font:13px ui-monospace,monospace;background:var(--c);padding:12px;border-radius:8px}
-@media print{#app,nav,button{display:none!important}#md{position:static;background:none;display:block}}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:10px}.k{background:#fff;border:1px solid var(--b);border-radius:16px;box-shadow:var(--sh);padding:14px}.k b{display:block;font-size:20px;color:var(--pd)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.two input{margin:4px 0}
+.ln{display:flex;justify-content:space-between;padding:4px 0}.tt{font-size:22px;font-weight:700;color:var(--pd);border-top:2px solid var(--b);margin-top:6px;padding-top:8px}
+.vu{background:var(--soft);border-radius:12px;padding:10px;margin:6px 0}
+.hl{background:var(--soft);border-radius:14px;padding:12px;font-size:13px;line-height:1.5;margin:8px 0}.hl b{color:var(--pd)}
+.bn{background:#fff7e6;border:1px solid #f5c26b;border-radius:14px;padding:12px;margin:8px 0;font-size:13px;line-height:1.5}.bn b{display:block;font-size:14px;margin-bottom:2px}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#fff;border-top:1px solid var(--b);padding-bottom:env(safe-area-inset-bottom);z-index:6}
+nav a{flex:1;text-align:center;padding:7px 0;font-size:10.5px;color:var(--m);cursor:pointer}nav a.on{color:var(--pd);font-weight:700}nav span{display:block;font-size:20px}
+#md{display:none;position:fixed;inset:0;background:#2d2a3399;align-items:flex-end;z-index:9}#md.on{display:flex}
+.sh{background:#fff;width:100%;max-height:90vh;overflow:auto;padding:18px;border-radius:20px 20px 0 0;max-width:640px;margin:auto}
+pre{white-space:pre-wrap;font:13px ui-monospace,monospace;background:var(--soft);padding:12px;border-radius:12px}
+@media(min-width:900px){
+ body{padding:0 0 0 210px}main{max-width:1100px;padding:24px}header{padding-left:24px}
+ nav{top:0;bottom:0;right:auto;width:210px;flex-direction:column;border-top:0;border-right:1px solid var(--b);padding:76px 10px 10px}
+ nav a{flex:0;display:flex;gap:10px;align-items:center;text-align:left;font-size:14px;padding:11px 14px;border-radius:12px}nav a.on{background:var(--soft)}nav span{font-size:18px}
+ .cols{display:grid;grid-template-columns:1fr 400px;gap:20px;align-items:start}.cols>.card{position:sticky;top:84px}
+ .gl{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:0 12px}.g{grid-template-columns:repeat(4,1fr)}
+ #md{align-items:center}.sh{border-radius:20px}}
+@media print{header,nav,button,#app main>*:not(.pp){display:none!important}#md{position:static;background:none;display:block}.sh{box-shadow:none}}
 </style></head><body>
 <div id="app"></div><div id="md"></div>
 <input type="file" id="fi" hidden accept=".json,application/json" onchange="ld(this)">
 <script>
 const $=s=>document.querySelector(s);
-let S,U,tab='home',fh=null,bk=0,ad='',cart={c:'',it:[],q:'',m:'Efectivo',paid:null},pq='',cq='';
+const AP=[["conversiones", "Conversiones", "Convertí, comprimí, redimensioná y girá imágenes. HEIC, JPG, PNG, WebP, GIF y más.", "🔄"], ["cv", "Creador de CV", "Crea tu currículum profesional online y descárgalo en PDF. Herramienta gratuita de Me Mata Limón.", "📄"], ["cuotas", "Cuotas y recargo", "", "💳"], ["barras", "Códigos de barras", "Convertí el número de un producto en un código de barras EAN-13 y imprimí las etiquetas.", "🏷️"], ["etiquetas", "Etiquetas y tarjetas", "Armá hojas A4 con tarjetas, stickers o etiquetas repetidas, listas para imprimir.", "🔖"], ["fotos", "Fotos", "Collage, carnet, polaroid, antes/después y más, en el navegador.", "🖼️"], ["inventario", "Inventario rápido", "Lista rápida de productos con cantidad y unidad. Exportá a PDF.", "📦"], ["mercado", "Lista del super", "Lista de compras con precios de góndola y total en vivo.", "🛒"], ["pdf", "PDF", "Uní, dividí, convertí y editá PDFs en el navegador.", "📑"], ["presupuesto", "Presupuesto", "", "🧾"], ["audio", "Prueba de audio", "", "🎧"], ["qr", "QR", "Generá códigos QR para links, WhatsApp, texto y más.", "🔳"], ["reproductor", "Reproductor", "", "▶️"], ["sorteo", "Sorteo y rifa", "", "🎲"], ["estados", "Texto para estados", "Creá imágenes de texto para estados de WhatsApp con fuentes, negrita, cursiva y fondos personalizados.", "💬"], ["turnos", "Turnos del día", "", "📅"], ["vuelto", "Vuelto", "", "💵"]];
+let S,fh=null,bk=0,ad='',tab='home',cart=nc(),pq='',cq='';
+function nc(){return{c:'',it:[],q:'',m:'Efectivo',ra:'',rp:'',da:'',dp:'',rec:''}}
 const idb=(m,k,v)=>new Promise((ok,ko)=>{const r=indexedDB.open('negocio',1);r.onupgradeneeded=()=>r.result.createObjectStore('k');r.onerror=ko;r.onsuccess=()=>{const st=r.result.transaction('k',m).objectStore('k');const q=m=='readonly'?st.get(k):st.put(v,k);q.onsuccess=()=>ok(q.result);q.onerror=ko}});
 const id=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const now=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16);
 const today=()=>now().slice(0,10);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const M=n=>(S.cur||'$')+' '+(+n||0).toLocaleString('es-AR',{maximumFractionDigits:2});
-const h=async s=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode('neg'+s)))].map(b=>b.toString(16).padStart(2,'0')).join('');
-const adm=()=>U&&U.role=='admin';
-const uname=i=>(S.users.find(u=>u.id==i)||{}).n||'-';
 const bal=c=>S.sales.filter(x=>x.c==c).reduce((a,x)=>a+x.tot-x.paid,0)-S.pays.filter(x=>x.c==c).reduce((a,x)=>a+x.a,0);
-const mine=()=>adm()?S.sales:S.sales.filter(s=>s.u==U.id);
 const row=(img,t,sub,r,oc)=>`<div class=r onclick="${oc||''}">${img===null?'':img?`<img src="${img}">`:'<div class=ph></div>'}<div><b>${esc(t)}</b><div class=m>${esc(sub)}</div></div><div class=s>${r||''}</div></div>`;
 
 /* ---------- Guardado ---------- */
 async function save(){S.mod=Date.now();await idb('readwrite','s',S);if(fh)try{if(await fh.queryPermission({mode:'readwrite'})=='granted')await wr()}catch(e){}}
 async function wr(){const w=await fh.createWritable();await w.write(JSON.stringify(S));await w.close();bk=S.mod;await idb('readwrite','bk',bk)}
+function dl(){const f=new File([JSON.stringify(S)],'mi-negocio-'+today()+'.json',{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;a.click();bk=S.mod;idb('readwrite','bk',bk)}
 async function backup(){
-  const txt=JSON.stringify(S);
   if(window.showSaveFilePicker){
     try{if(fh&&await fh.requestPermission({mode:'readwrite'})!='granted')fh=null;
       if(!fh){fh=await showSaveFilePicker({suggestedName:'mi-negocio-datos.json',types:[{description:'Datos',accept:{'application/json':['.json']}}]});await idb('readwrite','fh',fh)}
       await wr()}catch(e){return}
   }else{
-    const f=new File([txt],'mi-negocio-'+today()+'.json',{type:'application/json'});
-    if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'Copia de Mi Negocio'})}catch(e){return}}
-    else{const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;a.click()}
-    bk=S.mod;await idb('readwrite','bk',bk)
+    const f=new File([JSON.stringify(S)],'mi-negocio-'+today()+'.json',{type:'application/json'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'Copia de Mi Negocio'})}catch(e){return}bk=S.mod;await idb('readwrite','bk',bk)}else dl()
   }
   render()
 }
-function autoBk(){if(ad==today()||fh)return;ad=today();idb('readwrite','ad',ad);const f=new File([JSON.stringify(S)],'mi-negocio-'+ad+'.json',{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;a.click();bk=S.mod;idb('readwrite','bk',bk)}
+function autoBk(){if(ad==today()||fh)return;ad=today();idb('readwrite','ad',ad);dl()}
 function imp(){$('#fi').click()}
-async function ld(i){const f=i.files[0];if(!f||(S&&!adm()))return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.users)||!Array.isArray(d.prod))throw 0;if(S&&!confirm('Esto reemplaza los datos actuales de este dispositivo. ¿Continuar?'))return;S=d;U=null;await save();bk=S.mod;await idb('readwrite','bk',bk);render()}catch(e){alert('El archivo no es una copia válida.')}i.value=''}
+async function ld(i){const f=i.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.prod)||!Array.isArray(d.sales))throw 0;if(S&&!confirm('Esto reemplaza los datos que hay ahora en este dispositivo por los del archivo. ¿Continuar?'))return;S=d;await save();bk=S.mod;await idb('readwrite','bk',bk);tab='home';render()}catch(e){alert('El archivo no es una copia válida de Mi Negocio.')}i.value=''}
 
 /* ---------- UI base ---------- */
 function modal(x){const m=$('#md');m.innerHTML='<div class=sh>'+x+'</div>';m.className='on'}
@@ -74,75 +88,89 @@ function form(t,f,ok,extra=''){
 function pic(i,eid){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,480/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);const d=c.toDataURL('image/jpeg',.7),e=$('#'+eid);e.src=d;e.dataset.v=d};im.src=r.result};r.readAsDataURL(f)}
 function show(t){window._t=t;modal('<pre>'+esc(t)+'</pre><button class=p onclick=shr()>Compartir</button><button onclick=print()>Imprimir</button><button onclick=cls()>Cerrar</button>')}
 const shr=()=>navigator.share?navigator.share({text:_t}).catch(()=>{}):open('https://wa.me/?text='+encodeURIComponent(_t));
-function rcpt(s){const c=S.cli.find(x=>x.id==s.c);show([S.biz,'Comprobante N° '+String(s.n).padStart(6,'0'),s.d.replace('T',' '),'Vendedor: '+uname(s.u),c?'Cliente: '+c.n:'Cliente: Consumidor final','------------------------',...s.items.map(i=>i.q+' x '+i.n+'  '+M(i.q*i.pr)),'------------------------','TOTAL: '+M(s.tot),'Pagado ('+s.m+'): '+M(s.paid),s.tot>s.paid?'Saldo pendiente: '+M(s.tot-s.paid):'','Gracias por su compra'].join('\n'))}
-function rcptPay(p){const c=S.cli.find(x=>x.id==p.c);show([S.biz,'Recibo de cobro',p.d.replace('T',' '),'Cliente: '+(c?c.n:'-'),'Recibido ('+p.m+'): '+M(p.a),'Saldo actual: '+M(c?bal(c.id):0),'Cobró: '+uname(p.u)].join('\n'))}
+function rcpt(s){const c=S.cli.find(x=>x.id==s.c),L=[S.biz,'Comprobante N° '+String(s.n).padStart(6,'0'),s.d.replace('T',' '),'Cliente: '+(c?c.n:'Consumidor final'),'------------------------',...s.items.map(i=>i.q+' x '+i.n+'  '+M(i.q*i.pr)),'------------------------'];
+  if(s.dc||s.rc)L.push('Subtotal: '+M(s.sub));if(s.dc)L.push('Descuento: - '+M(s.dc));if(s.rc)L.push('Impuesto/recargo: + '+M(s.rc));
+  L.push('TOTAL: '+M(s.tot),'Medio de pago: '+s.m);if(s.tot>s.paid)L.push('Saldo pendiente: '+M(s.tot-s.paid));
+  if(s.rec>s.tot&&s.m=='Efectivo')L.push('Recibido: '+M(s.rec),'Vuelto: '+M(s.rec-s.tot));L.push('','Gracias por su compra');show(L.join('\n'))}
+function rcptPay(p){const c=S.cli.find(x=>x.id==p.c);show([S.biz,'Recibo de cobro',p.d.replace('T',' '),'Cliente: '+(c?c.n:'-'),'Recibido ('+p.m+'): '+M(p.a),'Saldo actual: '+M(c?bal(c.id):0)].join('\n'))}
 
-/* ---------- Acceso ---------- */
-const setup=()=>`<main><h2>Configurar tu negocio</h2><p class=m>Tus datos se guardan solo en este dispositivo. Después podés guardarlos en un archivo.</p><input id=s1 placeholder="Nombre del negocio"><input id=s2 placeholder="Símbolo de moneda" value="$"><input id=s3 placeholder="Tu nombre (administrador)"><input id=s4 type=password inputmode=numeric placeholder="PIN de 4 o más dígitos"><button class=p onclick=mk()>Crear negocio</button><h3>¿Ya tenés una copia guardada?</h3><button onclick=imp()>Cargar archivo de copia</button></main>`;
-async function mk(){const [b,c,n,p]=[1,2,3,4].map(i=>$('#s'+i).value.trim());if(!b||!n||p.length<4)return alert('Completá todos los campos. El PIN necesita 4 dígitos o más.');S={biz:b,cur:c||'$',seq:0,users:[],prod:[],cli:[],sales:[],buys:[],pays:[],tur:[]};U={id:id(),n,role:'admin',pin:await h(p)};S.users.push(U);await save();render()}
-const login=()=>`<main><h2>${esc(S.biz)}</h2><select id=lu>${S.users.map(u=>`<option value=${u.id}>${esc(u.n)}${u.role=='admin'?' (admin)':''}</option>`).join('')}</select><input id=lp type=password inputmode=numeric placeholder=PIN><button class=p onclick=doLogin()>Entrar</button></main>`;
-async function doLogin(){const u=S.users.find(x=>x.id==$('#lu').value);if(u&&u.pin==await h($('#lp').value)){U=u;tab='home';render()}else alert('PIN incorrecto')}
-
-/* ---------- Vistas ---------- */
+/* ---------- Inicio y avisos ---------- */
+function setup(){return `<header><div class=lg>M</div><div><h1>Mi Negocio</h1><p>Ventas, stock, clientes y turnos</p></div></header><main><div class=card><h2>Empecemos</h2><p class=m>Tus datos se guardan solo en este dispositivo. Más adelante podés guardarlos en un archivo de copia.</p><input id=s1 placeholder="Nombre de tu negocio"><input id=s2 placeholder="Símbolo de moneda" value="$"><button class=p onclick=mk()>Crear mi negocio</button></div><div class=card><h3>¿Ya usabas Mi Negocio?</h3><p class=m>Si tenés un archivo de copia (.json) de otro celular, PC o navegador, cargalo y recuperás todo.</p><button onclick=imp()>Cargar archivo de copia</button></div></main>`}
+async function mk(){const b=$('#s1').value.trim();if(!b)return alert('Poné el nombre de tu negocio.');S={biz:b,cur:$('#s2').value.trim()||'$',seq:0,prod:[],cli:[],sales:[],buys:[],pays:[],tur:[]};await save();render()}
+function banner(){const e=!S.prod.length&&!S.cli.length&&!S.sales.length,B='<button class=p onclick=backup()>Guardar copia ahora</button><button onclick=imp()>Cargar archivo</button>';
+  if(e&&!bk)return `<div class=bn><b>La app está en cero</b>No encontré productos, clientes ni ventas en este navegador. Si ya usabas Mi Negocio en otro lugar, cargá tu archivo de copia (.json) para recuperar todo. Si recién empezás, ignorá este aviso.<br>${B.replace(/<button class=p.*?<\/button>/,'')}</div>`;
+  if(S.mod>bk){const d=bk?Math.floor((Date.now()-bk)/864e5):0;return `<div class=bn><b>Tus datos todavía no están en un archivo</b>Ahora solo están dentro de este navegador y se pueden perder si se borran los datos del navegador o del celular.${d>0?' Hace '+d+' día(s) que no guardás una copia.':''} Guardá una copia (queda en Descargas o donde elijas). Si ya tenés un archivo de antes, cargalo para continuar desde ahí.<br>${B}</div>`}
+  return ''}
+function card(a,b){return `<div class=k><span class=m>${a}</span><b>${b}</b></div>`}
 const V={};
-V.home=()=>{const t=today(),m=t.slice(0,7),o=mine(),sm=p=>o.filter(s=>s.d.startsWith(p)).reduce((a,s)=>a+s.tot,0);
-  const low=S.prod.filter(p=>p.st<=p.mn),debt=S.cli.reduce((a,c)=>a+Math.max(0,bal(c.id)),0),g=o.filter(s=>s.d.startsWith(m)).reduce((a,s)=>a+s.items.reduce((b,i)=>b+(i.pr-i.co)*i.q,0),0);
-  const k=(a,b)=>`<div class=k><span class=m>${a}</span><b>${b}</b></div>`,tu=S.tur.filter(x=>x.st=='p'&&x.d>=t).sort((a,b)=>(a.d+a.h).localeCompare(b.d+b.h)).slice(0,3);
-  return `<h2>Hola, ${esc(U.n)}</h2><div class=g>${k('Ventas de hoy',M(sm(t)))}${k('Ventas del mes',M(sm(m)))}${adm()?k('Ganancia del mes',M(g))+k('Por cobrar',M(debt)):''}</div>`+
-  (low.length?'<h3>Stock bajo</h3>'+low.slice(0,8).map(p=>row(p.ph,p.n,'Mínimo '+p.mn,`<b class=red>${p.st}</b>`)).join(''):'')+
-  (tu.length?'<h3>Próximos turnos</h3>'+tu.map(x=>row(null,x.s||'Turno',x.d+' '+x.h,esc((S.cli.find(c=>c.id==x.c)||{}).n||''))).join(''):'')};
+V.home=()=>{const t=today(),m=t.slice(0,7),o=S.sales,sm=p=>o.filter(s=>s.d.startsWith(p)).reduce((a,s)=>a+s.tot,0),low=S.prod.filter(p=>p.st<=p.mn),debt=S.cli.reduce((a,c)=>a+Math.max(0,bal(c.id)),0),
+  g=o.filter(s=>s.d.startsWith(m)).reduce((a,s)=>a+s.tot-s.items.reduce((b,i)=>b+i.co*i.q,0),0),tu=S.tur.filter(x=>x.st=='p'&&x.d>=t).sort((a,b)=>(a.d+a.h).localeCompare(b.d+b.h)).slice(0,4);
+  return `<h2>Resumen</h2><div class=g>${card('Ventas de hoy',M(sm(t)))}${card('Ventas del mes',M(sm(m)))}${card('Ganancia del mes',M(g))}${card('Por cobrar',M(debt))}</div>`+
+  (!S.prod.length?'<div class=hl><b>Primeros pasos</b><br>1. Cargá tus productos en <b>Productos</b> (con foto, precio y stock).<br>2. Vendé desde <b>Vender</b>: se genera el comprobante.<br>3. En <b>Más</b> guardás la copia de seguridad.</div>':'')+
+  (low.length?'<h3>Stock bajo</h3><div class=gl>'+low.slice(0,8).map(p=>row(p.ph,p.n,'Mínimo '+p.mn,`<b class=red>${p.st}</b>`)).join('')+'</div>':'')+
+  (tu.length?'<h3>Próximos turnos</h3><div class=gl>'+tu.map(x=>row(null,x.s||'Turno',x.d+' '+x.h,esc((S.cli.find(c=>c.id==x.c)||{}).n||''))).join('')+'</div>':'')};
 
-/* Vender */
-const cartTot=()=>cart.it.reduce((a,i)=>a+i.q*S.prod.find(p=>p.id==i.p).pr,0);
-V.sell=()=>{const tot=cartTot();return `<h2>Nueva venta</h2><select onchange="cart.c=this.value"><option value="">Consumidor final</option>${S.cli.map(c=>`<option value=${c.id}${cart.c==c.id?' selected':''}>${esc(c.n)}</option>`).join('')}</select><input placeholder="Buscar producto" value="${esc(cart.q)}" oninput="cart.q=this.value;$('#pl').innerHTML=plist()"><div id=pl>${plist()}</div><h3>Carrito</h3>${cart.it.map(i=>{const p=S.prod.find(x=>x.id==i.p);return row(p.ph,p.n,M(p.pr)+' c/u',`<button onclick="chg('${p.id}',-1)">−</button> ${i.q} <button onclick="chg('${p.id}',1)">+</button>`)}).join('')||'<p class=m>Tocá un producto para agregarlo.</p>'}<h3>Total: ${M(tot)}</h3><select onchange="cart.m=this.value">${['Efectivo','Transferencia','Tarjeta','Otro'].map(x=>`<option${cart.m==x?' selected':''}>${x}</option>`).join('')}</select><input type=number inputmode=decimal placeholder="Monto cobrado (vacío = total)" value="${cart.paid??''}" oninput="cart.paid=this.value"><button class=p onclick=sellOk()>Confirmar venta</button>`};
-const plist=()=>S.prod.filter(p=>p.st>0&&p.n.toLowerCase().includes(cart.q.toLowerCase())).slice(0,30).map(p=>row(p.ph,p.n,'Stock '+p.st,M(p.pr),`addC('${p.id}')`)).join('')||'<p class=m>Sin productos con stock. Cargalos en Productos.</p>';
+/* ---------- Vender ---------- */
+const cartSub=()=>cart.it.reduce((a,i)=>a+i.q*S.prod.find(p=>p.id==i.p).pr,0);
+function calc(){const sub=cartSub(),n=x=>+x||0,dc=Math.min(sub,n(cart.da)+sub*n(cart.dp)/100),base=sub-dc,rc=n(cart.ra)+base*n(cart.rp)/100;return{sub,dc,rc,tot:Math.round((base+rc)*100)/100}}
+function upd(){const k=calc(),r=+cart.rec||0;
+  $('#vu').innerHTML=r?(r>=k.tot?`<div class=vu>Si te pagan con <b>${M(r)}</b>, el vuelto es <b>${M(r-k.tot)}</b></div>`:`<div class="vu red">Si te pagan con <b>${M(r)}</b> todavía faltan <b>${M(k.tot-r)}</b></div>`):'';
+  $('#tt').innerHTML=(k.dc||k.rc?`<div class=ln><span>Subtotal</span><span>${M(k.sub)}</span></div>`:'')+(k.dc?`<div class=ln><span>Descuento</span><span>− ${M(k.dc)}</span></div>`:'')+(k.rc?`<div class=ln><span>Impuesto / recargo</span><span>+ ${M(k.rc)}</span></div>`:'')+`<div class="ln tt"><span>TOTAL</span><span>${M(k.tot)}</span></div>`}
+V.sell=()=>`<h2>Nueva venta</h2><div class=hl><b>Cómo se vende:</b> 1) Elegí el cliente (opcional). 2) Tocá los productos para agregarlos al carrito. 3) Si hay impuesto/recargo o descuento, cargalo en pesos y/o en porcentaje. 4) Escribí con cuánto te pagan y te muestro el vuelto. 5) Tocá <b>Confirmar venta</b>: se descuenta el stock y se genera el comprobante por el <b>total</b>.</div>
+<div class=cols><div><select onchange="cart.c=this.value"><option value="">Consumidor final</option>${S.cli.map(c=>`<option value=${c.id}${cart.c==c.id?' selected':''}>${esc(c.n)}</option>`).join('')}</select><input placeholder="Buscar producto" value="${esc(cart.q)}" oninput="cart.q=this.value;$('#pl').innerHTML=plist()"><div id=pl class=gl>${plist()}</div></div>
+<div class=card><h3 style="margin-top:0">Carrito</h3>${cart.it.map(i=>{const p=S.prod.find(x=>x.id==i.p);return row(p.ph,p.n,M(p.pr)+' c/u',`<button onclick="chg('${p.id}',-1)">−</button> ${i.q} <button onclick="chg('${p.id}',1)">+</button>`)}).join('')||'<p class=m>Tocá un producto para agregarlo.</p>'}
+<div class=ln><b>Subtotal</b><b>${M(cartSub())}</b></div>
+<label class=m>Impuesto / recargo (en $ y/o en %)</label><div class=two><input type=number inputmode=decimal placeholder="$ fijo" value="${cart.ra}" oninput="cart.ra=this.value;upd()"><input type=number inputmode=decimal placeholder="% porcentaje" value="${cart.rp}" oninput="cart.rp=this.value;upd()"></div>
+<label class=m>Descuento (en $ y/o en %)</label><div class=two><input type=number inputmode=decimal placeholder="$ fijo" value="${cart.da}" oninput="cart.da=this.value;upd()"><input type=number inputmode=decimal placeholder="% porcentaje" value="${cart.dp}" oninput="cart.dp=this.value;upd()"></div>
+<label class=m>Medio de pago</label><select onchange="cart.m=this.value">${['Efectivo','Transferencia','Tarjeta','Cuenta corriente','Otro'].map(x=>`<option${cart.m==x?' selected':''}>${x}</option>`).join('')}</select>
+<label class=m>Monto recibido (solo para calcular el vuelto)</label><input type=number inputmode=decimal placeholder="Con cuánto te pagan" value="${cart.rec}" oninput="cart.rec=this.value;upd()"><div id=vu></div><div id=tt></div>
+<button class=p onclick=sellOk()>Confirmar venta</button></div></div>`;
+const plist=()=>S.prod.filter(p=>p.st>0&&p.n.toLowerCase().includes(cart.q.toLowerCase())).slice(0,40).map(p=>row(p.ph,p.n,'Stock '+p.st,M(p.pr),`addC('${p.id}')`)).join('')||'<p class=m>No hay productos con stock. Cargalos en Productos.</p>';
 function addC(i){const p=S.prod.find(x=>x.id==i),l=cart.it.find(x=>x.p==i);if(l){if(l.q<p.st)l.q++}else cart.it.push({p:i,q:1});render()}
 function chg(i,d){const p=S.prod.find(x=>x.id==i),l=cart.it.find(x=>x.p==i);l.q=Math.min(p.st,l.q+d);if(l.q<=0)cart.it=cart.it.filter(x=>x!=l);render()}
-function sellOk(){if(!cart.it.length)return alert('El carrito está vacío.');
-  const items=cart.it.map(i=>{const p=S.prod.find(x=>x.id==i.p);return{p:p.id,n:p.n,q:i.q,pr:p.pr,co:p.co||0}}),tot=items.reduce((a,i)=>a+i.q*i.pr,0),paid=cart.paid===null||cart.paid===''?tot:Math.min(+cart.paid,tot);
-  if(paid<tot&&!cart.c)return alert('Para dejar saldo pendiente, elegí un cliente.');
+function sellOk(){if(!cart.it.length)return alert('El carrito está vacío.');const cc=cart.m=='Cuenta corriente';if(cc&&!cart.c)return alert('Para dejar la venta en cuenta corriente, elegí un cliente.');
+  const items=cart.it.map(i=>{const p=S.prod.find(x=>x.id==i.p);return{p:p.id,n:p.n,q:i.q,pr:p.pr,co:p.co||0}}),k=calc();
   items.forEach(i=>S.prod.find(p=>p.id==i.p).st-=i.q);
-  const s={id:id(),n:++S.seq,d:now(),u:U.id,c:cart.c,items,tot,paid,m:cart.m};S.sales.unshift(s);cart={c:'',it:[],q:'',m:'Efectivo',paid:null};save();autoBk();render();rcpt(s)}
+  const s={id:id(),n:++S.seq,d:now(),c:cart.c,items,sub:k.sub,dc:k.dc,rc:k.rc,tot:k.tot,paid:cc?0:k.tot,m:cart.m,rec:+cart.rec||0};S.sales.unshift(s);cart=nc();save();autoBk();render();rcpt(s)}
 
-/* Productos */
-V.prod=()=>`<h2>Productos</h2><input placeholder="Buscar" value="${esc(pq)}" oninput="pq=this.value;$('#pr').innerHTML=prl()">${adm()?'<button class=p onclick="pf()">+ Nuevo</button>':''}<button onclick=catShare()>Compartir catálogo</button><div id=pr>${prl()}</div>`;
-const prl=()=>S.prod.filter(p=>p.n.toLowerCase().includes(pq.toLowerCase())).map(p=>row(p.ph,p.n,(p.cat||'')+' · Stock '+p.st,`<b>${M(p.pr)}</b>`,adm()?`pf('${p.id}')`:'')).join('')||'<p class=m>Todavía no cargaste productos.</p>';
-function pf(i){if(!adm())return;const p=S.prod.find(x=>x.id==i)||{};const f=[{k:'ph',l:'Foto',t:'photo',v:p.ph},{k:'n',l:'Nombre',v:p.n},{k:'cat',l:'Categoría',v:p.cat},{k:'pr',l:'Precio de venta',t:'number',v:p.pr}];
-  if(adm())f.push({k:'co',l:'Costo',t:'number',v:p.co},{k:'st',l:'Stock actual',t:'number',v:p.st},{k:'mn',l:'Avisar con stock de',t:'number',v:p.mn??2});
-  form(i?'Editar producto':'Nuevo producto',f,v=>{if(!v.n)return alert('Poné un nombre')||false;if(p.id)Object.assign(p,v);else S.prod.push({id:id(),co:0,st:0,mn:2,...v});save();render()},i&&adm()?`<button class=d onclick="delP('${i}')">Eliminar</button>`:'')}
+/* ---------- Productos ---------- */
+V.prod=()=>`<h2>Productos</h2><input placeholder="Buscar" value="${esc(pq)}" oninput="pq=this.value;$('#pr').innerHTML=prl()"><button class=p onclick="pf()">+ Nuevo producto</button><button onclick=catShare()>Compartir catálogo</button><div id=pr class=gl>${prl()}</div>`;
+const prl=()=>S.prod.filter(p=>p.n.toLowerCase().includes(pq.toLowerCase())).map(p=>row(p.ph,p.n,(p.cat||'')+' · Stock '+p.st,`<b>${M(p.pr)}</b>`,`pf('${p.id}')`)).join('')||'<p class=m>Todavía no cargaste productos.</p>';
+function pf(i){const p=S.prod.find(x=>x.id==i)||{};form(i?'Editar producto':'Nuevo producto',[{k:'ph',l:'Foto',t:'photo',v:p.ph},{k:'n',l:'Nombre',v:p.n},{k:'cat',l:'Categoría',v:p.cat},{k:'pr',l:'Precio de venta',t:'number',v:p.pr},{k:'co',l:'Costo',t:'number',v:p.co},{k:'st',l:'Stock actual',t:'number',v:p.st},{k:'mn',l:'Avisar con stock de',t:'number',v:p.mn??2}],
+  v=>{if(!v.n)return alert('Poné un nombre')||false;if(p.id)Object.assign(p,v);else S.prod.push({id:id(),...v});save();render()},i?`<button class=d onclick="delP('${i}')">Eliminar</button>`:'')}
 function delP(i){if(confirm('¿Eliminar producto?')){S.prod=S.prod.filter(p=>p.id!=i);save();cls();render()}}
 const catShare=()=>show(S.biz+' - Catálogo\n\n'+S.prod.filter(p=>p.st>0).map(p=>p.n+': '+M(p.pr)).join('\n'));
 
-/* Clientes */
-V.cli=()=>`<h2>Clientes</h2><input placeholder="Buscar" value="${esc(cq)}" oninput="cq=this.value;$('#cl').innerHTML=cll()"><button class=p onclick="cf()">+ Nuevo</button><div id=cl>${cll()}</div>`;
+/* ---------- Clientes ---------- */
+V.cli=()=>`<h2>Clientes</h2><input placeholder="Buscar" value="${esc(cq)}" oninput="cq=this.value;$('#cl').innerHTML=cll()"><button class=p onclick="cf()">+ Nuevo cliente</button><div id=cl class=gl>${cll()}</div>`;
 const cll=()=>S.cli.filter(c=>c.n.toLowerCase().includes(cq.toLowerCase())).map(c=>{const b=bal(c.id);return row(null,c.n,c.tel||'',b>0?`<b class=red>Debe ${M(b)}</b>`:'',`cd('${c.id}')`)}).join('')||'<p class=m>Todavía no cargaste clientes.</p>';
 function cf(i){const c=S.cli.find(x=>x.id==i)||{};form(i?'Editar cliente':'Nuevo cliente',[{k:'n',l:'Nombre',v:c.n},{k:'tel',l:'Teléfono',t:'tel',v:c.tel},{k:'nota',l:'Nota',v:c.nota}],v=>{if(!v.n)return alert('Poné un nombre')||false;if(c.id)Object.assign(c,v);else S.cli.push({id:id(),...v});save();render()})}
 function cd(i){const c=S.cli.find(x=>x.id==i),b=bal(i),n=S.sales.filter(s=>s.c==i).length;modal(`<h3>${esc(c.n)}</h3><p class=m>${esc(c.tel||'')} ${esc(c.nota||'')}<br>${n} compras · Saldo: <b class="${b>0?'red':''}">${M(b)}</b></p>${b>0?`<button class=p onclick="cob('${i}')">Registrar cobro</button>`:''}<button onclick="cf('${i}')">Editar</button>${c.tel?`<button onclick="open('https://wa.me/${c.tel.replace(/\D/g,'')}')">WhatsApp</button>`:''}<button onclick=cls()>Cerrar</button>`)}
-function cob(i){form('Registrar cobro',[{k:'a',l:'Monto recibido',t:'number',v:Math.max(0,bal(i))},{k:'m',l:'Medio',t:'select',v:'Efectivo',o:['Efectivo','Transferencia','Tarjeta'].map(x=>[x,x])}],v=>{if(v.a<=0)return false;const p={id:id(),d:now(),c:i,a:v.a,m:v.m,u:U.id};S.pays.unshift(p);save();autoBk();render();rcptPay(p);return false})}
+function cob(i){form('Registrar cobro',[{k:'a',l:'Monto recibido',t:'number',v:Math.max(0,bal(i))},{k:'m',l:'Medio',t:'select',v:'Efectivo',o:['Efectivo','Transferencia','Tarjeta'].map(x=>[x,x])}],v=>{if(v.a<=0)return false;const p={id:id(),d:now(),c:i,a:v.a,m:v.m};S.pays.unshift(p);save();autoBk();render();rcptPay(p);return false})}
 
-/* Turnos */
+/* ---------- Turnos ---------- */
 V.tur=()=>{const l=[...S.tur.filter(x=>x.st=='p').sort((a,b)=>(a.d+a.h).localeCompare(b.d+b.h)),...S.tur.filter(x=>x.st!='p').sort((a,b)=>(b.d+b.h).localeCompare(a.d+a.h)).slice(0,10)];
-  return `<h2>Turnos</h2><button class=p onclick=tf()>+ Nuevo turno</button>${l.map(x=>row(null,(x.s||'Turno')+(x.st=='ok'?' ✓':x.st=='x'?' (cancelado)':''),x.d+' '+x.h+' · '+((S.cli.find(c=>c.id==x.c)||{}).n||'Sin cliente'),'',`ta('${x.id}')`)).join('')||'<p class=m>No hay turnos cargados.</p>'}`};
-function tf(){form('Nuevo turno',[{k:'d',l:'Fecha',t:'date',v:today()},{k:'h',l:'Hora',t:'time',v:'10:00'},{k:'c',l:'Cliente',t:'select',v:'',o:[['','Sin cliente'],...S.cli.map(c=>[c.id,c.n])]},{k:'s',l:'Servicio o detalle'}],v=>{if(!v.d)return false;S.tur.push({id:id(),st:'p',u:U.id,...v});save();render()})}
+  return `<h2>Turnos</h2><button class=p onclick=tf()>+ Nuevo turno</button><div class=gl>${l.map(x=>row(null,(x.s||'Turno')+(x.st=='ok'?' ✓':x.st=='x'?' (cancelado)':''),x.d+' '+x.h+' · '+((S.cli.find(c=>c.id==x.c)||{}).n||'Sin cliente'),'',`ta('${x.id}')`)).join('')||'<p class=m>No hay turnos cargados.</p>'}</div>`};
+function tf(){form('Nuevo turno',[{k:'d',l:'Fecha',t:'date',v:today()},{k:'h',l:'Hora',t:'time',v:'10:00'},{k:'c',l:'Cliente',t:'select',v:'',o:[['','Sin cliente'],...S.cli.map(c=>[c.id,c.n])]},{k:'s',l:'Servicio o detalle'}],v=>{if(!v.d)return false;S.tur.push({id:id(),st:'p',...v});save();render()})}
 function ta(i){const x=S.tur.find(t=>t.id==i);modal(`<h3>${esc(x.s||'Turno')}</h3><p class=m>${x.d} ${x.h}</p><button class=p onclick="ts('${i}','ok')">Realizado</button><button onclick="ts('${i}','x')">Cancelar turno</button><button class=d onclick="ts('${i}','del')">Borrar</button><button onclick=cls()>Cerrar</button>`)}
 function ts(i,s){if(s=='del')S.tur=S.tur.filter(t=>t.id!=i);else S.tur.find(t=>t.id==i).st=s;save();cls();render()}
 
-/* Más */
-V.more=()=>{const b=S.mod>bk;return `<h2>Más</h2>${adm()?'<button onclick="tab=\'buy\';render()">Compras</button><button onclick="tab=\'usr\';render()">Usuarios</button>':''}<button onclick="tab='hist';render()">Historial de ventas</button><h3>Copia de seguridad</h3><p class=m>${b?'Hay cambios sin guardar en archivo.':'Todo guardado en tu archivo.'} ${fh?'Se actualiza solo en cada cambio.':'Con la primera venta del día se baja una copia sola a Descargas.'}</p><button class=p onclick=backup()>Guardar copia en archivo</button>${adm()?'<button onclick=imp()>Cargar copia</button><button onclick=cfg()>Datos del negocio</button>':''}<h3>Sesión</h3><button onclick="U=null;render()">Salir</button>`};
+/* ---------- Aplicaciones ---------- */
+V.apps=()=>`<h2>Aplicaciones</h2><p class=m>Herramientas extra de Me Mata Limón. Se abren en otra pestaña.</p><div class=gl><a class="r ap" href="https://mematalimon.com.ar/otrosnegocios/profesionales.html" target=_blank rel=noopener><span class=em>🏪</span><div><b>Negocios y servicios de Eldorado y alrededores</b><div class=m>Directorio de negocios y profesionales de la zona</div></div></a>${AP.map(a=>`<a class="r ap" href="../apps/${a[0]}/${a[0]}.html" target=_blank><span class=em>${a[3]}</span><div><b>${esc(a[1])}</b><div class=m>${esc(a[2])}</div></div></a>`).join('')}</div>`;
+
+/* ---------- Más ---------- */
+V.more=()=>{const ok=S.mod<=bk;return `<h2>Más</h2><div class=gl><div class=card><h3 style="margin-top:0">Copia de seguridad</h3><p class=m>${ok?'✓ Todo está guardado en tu archivo.':'Hay cambios sin guardar en archivo.'} ${fh?'Se actualiza solo en cada cambio.':'Con la primera venta del día se baja una copia sola a Descargas.'}</p><button class=p onclick=backup()>Guardar copia en archivo</button><button onclick=imp()>Cargar copia</button></div>
+<div class=card><h3 style="margin-top:0">Gestión</h3><button onclick="tab='buy';render()">Compras</button><button onclick="tab='hist';render()">Historial de ventas</button><button onclick=cfg()>Datos del negocio</button></div></div>`};
 function cfg(){form('Datos del negocio',[{k:'biz',l:'Nombre',v:S.biz},{k:'cur',l:'Moneda',v:S.cur}],v=>{S.biz=v.biz||S.biz;S.cur=v.cur||'$';save();render()})}
-V.hist=()=>`<h2>Ventas</h2><button onclick="tab='more';render()">← Volver</button>${mine().slice(0,60).map(s=>row(null,'N° '+String(s.n).padStart(6,'0')+' · '+uname(s.u),s.d.replace('T',' ')+' · '+s.m,`<b>${M(s.tot)}</b>`,`rcpt(S.sales.find(x=>x.id=='${s.id}'))`)).join('')||'<p class=m>Sin ventas todavía.</p>'}`;
-V.buy=()=>`<h2>Compras</h2><button onclick="tab='more';render()">← Volver</button><button class=p onclick=bf()>+ Registrar compra</button>${S.buys.slice(0,60).map(b=>row(null,b.pn+' ×'+b.q,b.d.replace('T',' ')+' · '+(b.s||'Sin proveedor'),M(b.q*b.co))).join('')||'<p class=m>Sin compras registradas.</p>'}`;
-function bf(){if(!S.prod.length)return alert('Primero cargá productos.');form('Registrar compra',[{k:'p',l:'Producto',t:'select',v:'',o:S.prod.map(p=>[p.id,p.n])},{k:'q',l:'Cantidad',t:'number',v:1},{k:'co',l:'Costo por unidad',t:'number',v:0},{k:'s',l:'Proveedor'}],v=>{if(v.q<=0)return false;const p=S.prod.find(x=>x.id==v.p);p.st+=v.q;if(v.co)p.co=v.co;S.buys.unshift({id:id(),d:now(),p:p.id,pn:p.n,q:v.q,co:v.co,s:v.s,u:U.id});save();render()})}
-V.usr=()=>`<h2>Usuarios</h2><button onclick="tab='more';render()">← Volver</button><button class=p onclick=uf()>+ Nuevo vendedor</button>${S.users.map(u=>row(null,u.n,u.role=='admin'?'Administrador':'Vendedor','',`ua('${u.id}')`)).join('')}`;
-function uf(){form('Nuevo vendedor',[{k:'n',l:'Nombre'},{k:'p',l:'PIN (4 o más dígitos)',t:'password'}],async v=>{if(!v.n||v.p.length<4)return alert('Poné nombre y PIN de 4+ dígitos')||false;S.users.push({id:id(),n:v.n,role:'seller',pin:await h(v.p)});save();render()})}
-function ua(i){const u=S.users.find(x=>x.id==i);modal(`<h3>${esc(u.n)}</h3><button onclick="up('${i}')">Cambiar PIN</button>${u.role!='admin'?`<button class=d onclick="ud('${i}')">Eliminar</button>`:''}<button onclick=cls()>Cerrar</button>`)}
-function up(i){form('Nuevo PIN',[{k:'p',l:'PIN',t:'password'}],async v=>{if(v.p.length<4)return alert('Mínimo 4 dígitos')||false;S.users.find(x=>x.id==i).pin=await h(v.p);save()})}
-function ud(i){if(confirm('¿Eliminar vendedor? Sus ventas quedan en el historial.')){S.users=S.users.filter(u=>u.id!=i);save();cls();render()}}
+V.hist=()=>`<h2>Historial de ventas</h2><button onclick="tab='more';render()">← Volver</button><div class=gl>${S.sales.slice(0,80).map(s=>row(null,'N° '+String(s.n).padStart(6,'0'),s.d.replace('T',' ')+' · '+s.m,`<b>${M(s.tot)}</b>`,`rcpt(S.sales.find(x=>x.id=='${s.id}'))`)).join('')||'<p class=m>Sin ventas todavía.</p>'}</div>`;
+V.buy=()=>`<h2>Compras</h2><button onclick="tab='more';render()">← Volver</button><button class=p onclick=bf()>+ Registrar compra</button><div class=gl>${S.buys.slice(0,80).map(b=>row(null,b.pn+' ×'+b.q,b.d.replace('T',' ')+' · '+(b.s||'Sin proveedor'),M(b.q*b.co))).join('')||'<p class=m>Sin compras registradas.</p>'}</div>`;
+function bf(){if(!S.prod.length)return alert('Primero cargá productos.');form('Registrar compra',[{k:'p',l:'Producto',t:'select',v:'',o:S.prod.map(p=>[p.id,p.n])},{k:'q',l:'Cantidad',t:'number',v:1},{k:'co',l:'Costo por unidad',t:'number',v:0},{k:'s',l:'Proveedor'}],v=>{if(v.q<=0)return false;const p=S.prod.find(x=>x.id==v.p);p.st+=v.q;if(v.co)p.co=v.co;S.buys.unshift({id:id(),d:now(),p:p.id,pn:p.n,q:v.q,co:v.co,s:v.s});save();render()})}
 
 /* ---------- Render ---------- */
-function render(){const a=$('#app');if(!S)return a.innerHTML=setup();if(!U)return a.innerHTML=login();
-  const T=[['home','🏠','Inicio'],['sell','🛒','Vender'],['prod','📦','Productos'],['cli','👥','Clientes'],['tur','📅','Turnos'],['more','☰','Más']],base=['buy','usr','hist'].includes(tab)?'more':tab;
-  a.innerHTML=(S.mod>bk?'<div class=bn onclick=backup()>'+(bk&&(Date.now()-bk)>864e5?'Hace '+Math.floor((Date.now()-bk)/864e5)+' día(s) sin copia. ':'')+'Hay cambios sin guardar en archivo. Tocá para guardar.</div>':'')+'<main>'+V[tab]()+'</main><nav>'+T.map(t=>`<a class="${t[0]==base?'on':''}" onclick="tab='${t[0]}';render()"><span>${t[1]}</span>${t[2]}</a>`).join('')+'</nav>'}
+function render(){const a=$('#app');if(!S)return a.innerHTML=setup();
+  const T=[['home','🏠','Inicio'],['sell','🛒','Vender'],['prod','📦','Productos'],['cli','👥','Clientes'],['tur','📅','Turnos'],['apps','🧩','Apps'],['more','☰','Más']],base=['buy','hist'].includes(tab)?'more':tab;
+  a.innerHTML=`<header><div class=lg>${esc(S.biz[0]||'M').toUpperCase()}</div><div><h1>${esc(S.biz)}</h1><p>Ventas, stock, clientes y turnos</p></div></header><main>${tab=='apps'?'':banner()}${V[tab]()}</main><nav>${T.map(t=>`<a class="${t[0]==base?'on':''}" onclick="tab='${t[0]}';render()"><span>${t[1]}</span>${t[2]}</a>`).join('')}</nav>`;
+  if(tab=='sell')upd()}
 (async()=>{try{S=await idb('readonly','s');fh=await idb('readonly','fh');bk=await idb('readonly','bk')||0;ad=await idb('readonly','ad')||'';navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}render()})();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script></body></html>
