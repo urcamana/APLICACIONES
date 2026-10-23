@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#14213d"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png">
+<title>Mi Negocio</title>
+<style>
+:root{--bg:#eef1f5;--c:#fff;--t:#14213d;--m:#5f6b80;--a:#14213d;--o:#e07a00;--b:#d9dee7;--r:#c0392b;padding-top:env(safe-area-inset-top)}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1521;--c:#19223a;--t:#e8ecf4;--m:#97a3ba;--a:#f2b45c;--o:#f2b45c;--b:#2b3652;--r:#f28b82}}
+*{box-sizing:border-box}body{margin:0;font:15px system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--t);padding-bottom:80px}
+h2{margin:.3em 0 .6em;font-size:22px}h3{margin:1.1em 0 .4em;font-size:16px}
+main{padding:12px;max-width:640px;margin:auto}
+input,select,button{font:inherit;padding:11px;border-radius:10px;border:1px solid var(--b);background:var(--c);color:var(--t);width:100%;margin:4px 0}
+button{cursor:pointer;width:auto;margin-right:6px;font-weight:600}button.p{background:var(--a);color:var(--bg);border:0}
+button.d{color:var(--r)}
+.r{display:flex;align-items:center;gap:10px;background:var(--c);border:1px solid var(--b);border-radius:10px;padding:10px;margin:6px 0}
+.r>div{flex:1;min-width:0}.r img,.ph{width:48px;height:48px;border-radius:8px;object-fit:cover;background:var(--b)}
+.m{color:var(--m);font-size:13px}.red{color:var(--r)}.s{text-align:right;white-space:nowrap}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:8px}.k{background:var(--c);border-left:4px solid var(--o);border-radius:6px;padding:12px}.k b{display:block;font-size:20px}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--c);border-top:1px solid var(--b);padding-bottom:env(safe-area-inset-bottom)}
+nav a{flex:1;text-align:center;padding:8px 0;font-size:11px;color:var(--m)}nav a.on{color:var(--a);font-weight:700}nav span{display:block;font-size:20px}
+#md{display:none;position:fixed;inset:0;background:#0008;align-items:flex-end;z-index:9}#md.on{display:flex}
+.sh{background:var(--bg);width:100%;max-height:90vh;overflow:auto;padding:16px;border-radius:16px 16px 0 0;max-width:640px;margin:auto}
+.bn{background:var(--o);color:#fff;padding:10px;text-align:center;font-size:13px;font-weight:600}
+pre{white-space:pre-wrap;font:13px ui-monospace,monospace;background:var(--c);padding:12px;border-radius:8px}
+@media print{#app,nav,button{display:none!important}#md{position:static;background:none;display:block}}
+</style></head><body>
+<div id="app"></div><div id="md"></div>
+<input type="file" id="fi" hidden accept=".json,application/json" onchange="ld(this)">
+<script>
+const $=s=>document.querySelector(s);
+let S,U,tab='home',fh=null,bk=0,ad='',cart={c:'',it:[],q:'',m:'Efectivo',paid:null},pq='',cq='';
+const idb=(m,k,v)=>new Promise((ok,ko)=>{const r=indexedDB.open('negocio',1);r.onupgradeneeded=()=>r.result.createObjectStore('k');r.onerror=ko;r.onsuccess=()=>{const st=r.result.transaction('k',m).objectStore('k');const q=m=='readonly'?st.get(k):st.put(v,k);q.onsuccess=()=>ok(q.result);q.onerror=ko}});
+const id=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const now=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16);
+const today=()=>now().slice(0,10);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const M=n=>(S.cur||'$')+' '+(+n||0).toLocaleString('es-AR',{maximumFractionDigits:2});
+const h=async s=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode('neg'+s)))].map(b=>b.toString(16).padStart(2,'0')).join('');
+const adm=()=>U&&U.role=='admin';
+const uname=i=>(S.users.find(u=>u.id==i)||{}).n||'-';
+const bal=c=>S.sales.filter(x=>x.c==c).reduce((a,x)=>a+x.tot-x.paid,0)-S.pays.filter(x=>x.c==c).reduce((a,x)=>a+x.a,0);
+const mine=()=>adm()?S.sales:S.sales.filter(s=>s.u==U.id);
+const row=(img,t,sub,r,oc)=>`<div class=r onclick="${oc||''}">${img===null?'':img?`<img src="${img}">`:'<div class=ph></div>'}<div><b>${esc(t)}</b><div class=m>${esc(sub)}</div></div><div class=s>${r||''}</div></div>`;
+
+/* ---------- Guardado ---------- */
+async function save(){S.mod=Date.now();await idb('readwrite','s',S);if(fh)try{if(await fh.queryPermission({mode:'readwrite'})=='granted')await wr()}catch(e){}}
+async function wr(){const w=await fh.createWritable();await w.write(JSON.stringify(S));await w.close();bk=S.mod;await idb('readwrite','bk',bk)}
+async function backup(){
+  const txt=JSON.stringify(S);
+  if(window.showSaveFilePicker){
+    try{if(fh&&await fh.requestPermission({mode:'readwrite'})!='granted')fh=null;
+      if(!fh){fh=await showSaveFilePicker({suggestedName:'mi-negocio-datos.json',types:[{description:'Datos',accept:{'application/json':['.json']}}]});await idb('readwrite','fh',fh)}
+      await wr()}catch(e){return}
+  }else{
+    const f=new File([txt],'mi-negocio-'+today()+'.json',{type:'application/json'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'Copia de Mi Negocio'})}catch(e){return}}
+    else{const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;a.click()}
+    bk=S.mod;await idb('readwrite','bk',bk)
+  }
+  render()
+}
+function autoBk(){if(ad==today()||fh)return;ad=today();idb('readwrite','ad',ad);const f=new File([JSON.stringify(S)],'mi-negocio-'+ad+'.json',{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;a.click();bk=S.mod;idb('readwrite','bk',bk)}
+function imp(){$('#fi').click()}
+async function ld(i){const f=i.files[0];if(!f||(S&&!adm()))return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.users)||!Array.isArray(d.prod))throw 0;if(S&&!confirm('Esto reemplaza los datos actuales de este dispositivo. ¿Continuar?'))return;S=d;U=null;await save();bk=S.mod;await idb('readwrite','bk',bk);render()}catch(e){alert('El archivo no es una copia válida.')}i.value=''}
+
+/* ---------- UI base ---------- */
+function modal(x){const m=$('#md');m.innerHTML='<div class=sh>'+x+'</div>';m.className='on'}
+const cls=()=>{$('#md').className=''};
+function form(t,f,ok,extra=''){
+  window._ok=async()=>{const v={};f.forEach(x=>{const e=$('#f_'+x.k);v[x.k]=x.t=='photo'?e.dataset.v||'':x.t=='number'?+e.value||0:e.value.trim()});if(await ok(v)!==false)cls()};
+  modal('<h3>'+t+'</h3>'+f.map(x=>'<label class=m>'+x.l+'</label>'+(x.t=='photo'?`<br><img class=ph id=f_${x.k} data-v="" style="width:96px;height:96px"><input type=file accept="image/*" onchange="pic(this,'f_${x.k}')">`:x.t=='select'?`<select id=f_${x.k}>`+x.o.map(o=>`<option value="${o[0]}"${o[0]==x.v?' selected':''}>${esc(o[1])}</option>`).join('')+'</select>':`<input id=f_${x.k} type=${x.t||'text'}${x.t=='number'?' step=any inputmode=decimal':''} value="${esc(x.v)}">`)).join('')+'<br><button class=p onclick=_ok()>Guardar</button><button onclick=cls()>Cancelar</button>'+extra);
+  f.filter(x=>x.t=='photo'&&x.v).forEach(x=>{const e=$('#f_'+x.k);e.src=x.v;e.dataset.v=x.v})
+}
+function pic(i,eid){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,480/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);const d=c.toDataURL('image/jpeg',.7),e=$('#'+eid);e.src=d;e.dataset.v=d};im.src=r.result};r.readAsDataURL(f)}
+function show(t){window._t=t;modal('<pre>'+esc(t)+'</pre><button class=p onclick=shr()>Compartir</button><button onclick=print()>Imprimir</button><button onclick=cls()>Cerrar</button>')}
+const shr=()=>navigator.share?navigator.share({text:_t}).catch(()=>{}):open('https://wa.me/?text='+encodeURIComponent(_t));
+function rcpt(s){const c=S.cli.find(x=>x.id==s.c);show([S.biz,'Comprobante N° '+String(s.n).padStart(6,'0'),s.d.replace('T',' '),'Vendedor: '+uname(s.u),c?'Cliente: '+c.n:'Cliente: Consumidor final','------------------------',...s.items.map(i=>i.q+' x '+i.n+'  '+M(i.q*i.pr)),'------------------------','TOTAL: '+M(s.tot),'Pagado ('+s.m+'): '+M(s.paid),s.tot>s.paid?'Saldo pendiente: '+M(s.tot-s.paid):'','Gracias por su compra'].join('\n'))}
+function rcptPay(p){const c=S.cli.find(x=>x.id==p.c);show([S.biz,'Recibo de cobro',p.d.replace('T',' '),'Cliente: '+(c?c.n:'-'),'Recibido ('+p.m+'): '+M(p.a),'Saldo actual: '+M(c?bal(c.id):0),'Cobró: '+uname(p.u)].join('\n'))}
+
+/* ---------- Acceso ---------- */
+const setup=()=>`<main><h2>Configurar tu negocio</h2><p class=m>Tus datos se guardan solo en este dispositivo. Después podés guardarlos en un archivo.</p><input id=s1 placeholder="Nombre del negocio"><input id=s2 placeholder="Símbolo de moneda" value="$"><input id=s3 placeholder="Tu nombre (administrador)"><input id=s4 type=password inputmode=numeric placeholder="PIN de 4 o más dígitos"><button class=p onclick=mk()>Crear negocio</button><h3>¿Ya tenés una copia guardada?</h3><button onclick=imp()>Cargar archivo de copia</button></main>`;
+async function mk(){const [b,c,n,p]=[1,2,3,4].map(i=>$('#s'+i).value.trim());if(!b||!n||p.length<4)return alert('Completá todos los campos. El PIN necesita 4 dígitos o más.');S={biz:b,cur:c||'$',seq:0,users:[],prod:[],cli:[],sales:[],buys:[],pays:[],tur:[]};U={id:id(),n,role:'admin',pin:await h(p)};S.users.push(U);await save();render()}
+const login=()=>`<main><h2>${esc(S.biz)}</h2><select id=lu>${S.users.map(u=>`<option value=${u.id}>${esc(u.n)}${u.role=='admin'?' (admin)':''}</option>`).join('')}</select><input id=lp type=password inputmode=numeric placeholder=PIN><button class=p onclick=doLogin()>Entrar</button></main>`;
+async function doLogin(){const u=S.users.find(x=>x.id==$('#lu').value);if(u&&u.pin==await h($('#lp').value)){U=u;tab='home';render()}else alert('PIN incorrecto')}
+
+/* ---------- Vistas ---------- */
+const V={};
+V.home=()=>{const t=today(),m=t.slice(0,7),o=mine(),sm=p=>o.filter(s=>s.d.startsWith(p)).reduce((a,s)=>a+s.tot,0);
+  const low=S.prod.filter(p=>p.st<=p.mn),debt=S.cli.reduce((a,c)=>a+Math.max(0,bal(c.id)),0),g=o.filter(s=>s.d.startsWith(m)).reduce((a,s)=>a+s.items.reduce((b,i)=>b+(i.pr-i.co)*i.q,0),0);
+  const k=(a,b)=>`<div class=k><span class=m>${a}</span><b>${b}</b></div>`,tu=S.tur.filter(x=>x.st=='p'&&x.d>=t).sort((a,b)=>(a.d+a.h).localeCompare(b.d+b.h)).slice(0,3);
+  return `<h2>Hola, ${esc(U.n)}</h2><div class=g>${k('Ventas de hoy',M(sm(t)))}${k('Ventas del mes',M(sm(m)))}${adm()?k('Ganancia del mes',M(g))+k('Por cobrar',M(debt)):''}</div>`+
+  (low.length?'<h3>Stock bajo</h3>'+low.slice(0,8).map(p=>row(p.ph,p.n,'Mínimo '+p.mn,`<b class=red>${p.st}</b>`)).join(''):'')+
+  (tu.length?'<h3>Próximos turnos</h3>'+tu.map(x=>row(null,x.s||'Turno',x.d+' '+x.h,esc((S.cli.find(c=>c.id==x.c)||{}).n||''))).join(''):'')};
+
+/* Vender */
+const cartTot=()=>cart.it.reduce((a,i)=>a+i.q*S.prod.find(p=>p.id==i.p).pr,0);
+V.sell=()=>{const tot=cartTot();return `<h2>Nueva venta</h2><select onchange="cart.c=this.value"><option value="">Consumidor final</option>${S.cli.map(c=>`<option value=${c.id}${cart.c==c.id?' selected':''}>${esc(c.n)}</option>`).join('')}</select><input placeholder="Buscar producto" value="${esc(cart.q)}" oninput="cart.q=this.value;$('#pl').innerHTML=plist()"><div id=pl>${plist()}</div><h3>Carrito</h3>${cart.it.map(i=>{const p=S.prod.find(x=>x.id==i.p);return row(p.ph,p.n,M(p.pr)+' c/u',`<button onclick="chg('${p.id}',-1)">−</button> ${i.q} <button onclick="chg('${p.id}',1)">+</button>`)}).join('')||'<p class=m>Tocá un producto para agregarlo.</p>'}<h3>Total: ${M(tot)}</h3><select onchange="cart.m=this.value">${['Efectivo','Transferencia','Tarjeta','Otro'].map(x=>`<option${cart.m==x?' selected':''}>${x}</option>`).join('')}</select><input type=number inputmode=decimal placeholder="Monto cobrado (vacío = total)" value="${cart.paid??''}" oninput="cart.paid=this.value"><button class=p onclick=sellOk()>Confirmar venta</button>`};
+const plist=()=>S.prod.filter(p=>p.st>0&&p.n.toLowerCase().includes(cart.q.toLowerCase())).slice(0,30).map(p=>row(p.ph,p.n,'Stock '+p.st,M(p.pr),`addC('${p.id}')`)).join('')||'<p class=m>Sin productos con stock. Cargalos en Productos.</p>';
+function addC(i){const p=S.prod.find(x=>x.id==i),l=cart.it.find(x=>x.p==i);if(l){if(l.q<p.st)l.q++}else cart.it.push({p:i,q:1});render()}
+function chg(i,d){const p=S.prod.find(x=>x.id==i),l=cart.it.find(x=>x.p==i);l.q=Math.min(p.st,l.q+d);if(l.q<=0)cart.it=cart.it.filter(x=>x!=l);render()}
+function sellOk(){if(!cart.it.length)return alert('El carrito está vacío.');
+  const items=cart.it.map(i=>{const p=S.prod.find(x=>x.id==i.p);return{p:p.id,n:p.n,q:i.q,pr:p.pr,co:p.co||0}}),tot=items.reduce((a,i)=>a+i.q*i.pr,0),paid=cart.paid===null||cart.paid===''?tot:Math.min(+cart.paid,tot);
+  if(paid<tot&&!cart.c)return alert('Para dejar saldo pendiente, elegí un cliente.');
+  items.forEach(i=>S.prod.find(p=>p.id==i.p).st-=i.q);
+  const s={id:id(),n:++S.seq,d:now(),u:U.id,c:cart.c,items,tot,paid,m:cart.m};S.sales.unshift(s);cart={c:'',it:[],q:'',m:'Efectivo',paid:null};save();autoBk();render();rcpt(s)}
+
+/* Productos */
+V.prod=()=>`<h2>Productos</h2><input placeholder="Buscar" value="${esc(pq)}" oninput="pq=this.value;$('#pr').innerHTML=prl()">${adm()?'<button class=p onclick="pf()">+ Nuevo</button>':''}<button onclick=catShare()>Compartir catálogo</button><div id=pr>${prl()}</div>`;
+const prl=()=>S.prod.filter(p=>p.n.toLowerCase().includes(pq.toLowerCase())).map(p=>row(p.ph,p.n,(p.cat||'')+' · Stock '+p.st,`<b>${M(p.pr)}</b>`,adm()?`pf('${p.id}')`:'')).join('')||'<p class=m>Todavía no cargaste productos.</p>';
+function pf(i){if(!adm())return;const p=S.prod.find(x=>x.id==i)||{};const f=[{k:'ph',l:'Foto',t:'photo',v:p.ph},{k:'n',l:'Nombre',v:p.n},{k:'cat',l:'Categoría',v:p.cat},{k:'pr',l:'Precio de venta',t:'number',v:p.pr}];
+  if(adm())f.push({k:'co',l:'Costo',t:'number',v:p.co},{k:'st',l:'Stock actual',t:'number',v:p.st},{k:'mn',l:'Avisar con stock de',t:'number',v:p.mn??2});
+  form(i?'Editar producto':'Nuevo producto',f,v=>{if(!v.n)return alert('Poné un nombre')||false;if(p.id)Object.assign(p,v);else S.prod.push({id:id(),co:0,st:0,mn:2,...v});save();render()},i&&adm()?`<button class=d onclick="delP('${i}')">Eliminar</button>`:'')}
+function delP(i){if(confirm('¿Eliminar producto?')){S.prod=S.prod.filter(p=>p.id!=i);save();cls();render()}}
+const catShare=()=>show(S.biz+' - Catálogo\n\n'+S.prod.filter(p=>p.st>0).map(p=>p.n+': '+M(p.pr)).join('\n'));
+
+/* Clientes */
+V.cli=()=>`<h2>Clientes</h2><input placeholder="Buscar" value="${esc(cq)}" oninput="cq=this.value;$('#cl').innerHTML=cll()"><button class=p onclick="cf()">+ Nuevo</button><div id=cl>${cll()}</div>`;
+const cll=()=>S.cli.filter(c=>c.n.toLowerCase().includes(cq.toLowerCase())).map(c=>{const b=bal(c.id);return row(null,c.n,c.tel||'',b>0?`<b class=red>Debe ${M(b)}</b>`:'',`cd('${c.id}')`)}).join('')||'<p class=m>Todavía no cargaste clientes.</p>';
+function cf(i){const c=S.cli.find(x=>x.id==i)||{};form(i?'Editar cliente':'Nuevo cliente',[{k:'n',l:'Nombre',v:c.n},{k:'tel',l:'Teléfono',t:'tel',v:c.tel},{k:'nota',l:'Nota',v:c.nota}],v=>{if(!v.n)return alert('Poné un nombre')||false;if(c.id)Object.assign(c,v);else S.cli.push({id:id(),...v});save();render()})}
+function cd(i){const c=S.cli.find(x=>x.id==i),b=bal(i),n=S.sales.filter(s=>s.c==i).length;modal(`<h3>${esc(c.n)}</h3><p class=m>${esc(c.tel||'')} ${esc(c.nota||'')}<br>${n} compras · Saldo: <b class="${b>0?'red':''}">${M(b)}</b></p>${b>0?`<button class=p onclick="cob('${i}')">Registrar cobro</button>`:''}<button onclick="cf('${i}')">Editar</button>${c.tel?`<button onclick="open('https://wa.me/${c.tel.replace(/\D/g,'')}')">WhatsApp</button>`:''}<button onclick=cls()>Cerrar</button>`)}
+function cob(i){form('Registrar cobro',[{k:'a',l:'Monto recibido',t:'number',v:Math.max(0,bal(i))},{k:'m',l:'Medio',t:'select',v:'Efectivo',o:['Efectivo','Transferencia','Tarjeta'].map(x=>[x,x])}],v=>{if(v.a<=0)return false;const p={id:id(),d:now(),c:i,a:v.a,m:v.m,u:U.id};S.pays.unshift(p);save();autoBk();render();rcptPay(p);return false})}
+
+/* Turnos */
+V.tur=()=>{const l=[...S.tur.filter(x=>x.st=='p').sort((a,b)=>(a.d+a.h).localeCompare(b.d+b.h)),...S.tur.filter(x=>x.st!='p').sort((a,b)=>(b.d+b.h).localeCompare(a.d+a.h)).slice(0,10)];
+  return `<h2>Turnos</h2><button class=p onclick=tf()>+ Nuevo turno</button>${l.map(x=>row(null,(x.s||'Turno')+(x.st=='ok'?' ✓':x.st=='x'?' (cancelado)':''),x.d+' '+x.h+' · '+((S.cli.find(c=>c.id==x.c)||{}).n||'Sin cliente'),'',`ta('${x.id}')`)).join('')||'<p class=m>No hay turnos cargados.</p>'}`};
+function tf(){form('Nuevo turno',[{k:'d',l:'Fecha',t:'date',v:today()},{k:'h',l:'Hora',t:'time',v:'10:00'},{k:'c',l:'Cliente',t:'select',v:'',o:[['','Sin cliente'],...S.cli.map(c=>[c.id,c.n])]},{k:'s',l:'Servicio o detalle'}],v=>{if(!v.d)return false;S.tur.push({id:id(),st:'p',u:U.id,...v});save();render()})}
+function ta(i){const x=S.tur.find(t=>t.id==i);modal(`<h3>${esc(x.s||'Turno')}</h3><p class=m>${x.d} ${x.h}</p><button class=p onclick="ts('${i}','ok')">Realizado</button><button onclick="ts('${i}','x')">Cancelar turno</button><button class=d onclick="ts('${i}','del')">Borrar</button><button onclick=cls()>Cerrar</button>`)}
+function ts(i,s){if(s=='del')S.tur=S.tur.filter(t=>t.id!=i);else S.tur.find(t=>t.id==i).st=s;save();cls();render()}
+
+/* Más */
+V.more=()=>{const b=S.mod>bk;return `<h2>Más</h2>${adm()?'<button onclick="tab=\'buy\';render()">Compras</button><button onclick="tab=\'usr\';render()">Usuarios</button>':''}<button onclick="tab='hist';render()">Historial de ventas</button><h3>Copia de seguridad</h3><p class=m>${b?'Hay cambios sin guardar en archivo.':'Todo guardado en tu archivo.'} ${fh?'Se actualiza solo en cada cambio.':'Con la primera venta del día se baja una copia sola a Descargas.'}</p><button class=p onclick=backup()>Guardar copia en archivo</button>${adm()?'<button onclick=imp()>Cargar copia</button><button onclick=cfg()>Datos del negocio</button>':''}<h3>Sesión</h3><button onclick="U=null;render()">Salir</button>`};
+function cfg(){form('Datos del negocio',[{k:'biz',l:'Nombre',v:S.biz},{k:'cur',l:'Moneda',v:S.cur}],v=>{S.biz=v.biz||S.biz;S.cur=v.cur||'$';save();render()})}
+V.hist=()=>`<h2>Ventas</h2><button onclick="tab='more';render()">← Volver</button>${mine().slice(0,60).map(s=>row(null,'N° '+String(s.n).padStart(6,'0')+' · '+uname(s.u),s.d.replace('T',' ')+' · '+s.m,`<b>${M(s.tot)}</b>`,`rcpt(S.sales.find(x=>x.id=='${s.id}'))`)).join('')||'<p class=m>Sin ventas todavía.</p>'}`;
+V.buy=()=>`<h2>Compras</h2><button onclick="tab='more';render()">← Volver</button><button class=p onclick=bf()>+ Registrar compra</button>${S.buys.slice(0,60).map(b=>row(null,b.pn+' ×'+b.q,b.d.replace('T',' ')+' · '+(b.s||'Sin proveedor'),M(b.q*b.co))).join('')||'<p class=m>Sin compras registradas.</p>'}`;
+function bf(){if(!S.prod.length)return alert('Primero cargá productos.');form('Registrar compra',[{k:'p',l:'Producto',t:'select',v:'',o:S.prod.map(p=>[p.id,p.n])},{k:'q',l:'Cantidad',t:'number',v:1},{k:'co',l:'Costo por unidad',t:'number',v:0},{k:'s',l:'Proveedor'}],v=>{if(v.q<=0)return false;const p=S.prod.find(x=>x.id==v.p);p.st+=v.q;if(v.co)p.co=v.co;S.buys.unshift({id:id(),d:now(),p:p.id,pn:p.n,q:v.q,co:v.co,s:v.s,u:U.id});save();render()})}
+V.usr=()=>`<h2>Usuarios</h2><button onclick="tab='more';render()">← Volver</button><button class=p onclick=uf()>+ Nuevo vendedor</button>${S.users.map(u=>row(null,u.n,u.role=='admin'?'Administrador':'Vendedor','',`ua('${u.id}')`)).join('')}`;
+function uf(){form('Nuevo vendedor',[{k:'n',l:'Nombre'},{k:'p',l:'PIN (4 o más dígitos)',t:'password'}],async v=>{if(!v.n||v.p.length<4)return alert('Poné nombre y PIN de 4+ dígitos')||false;S.users.push({id:id(),n:v.n,role:'seller',pin:await h(v.p)});save();render()})}
+function ua(i){const u=S.users.find(x=>x.id==i);modal(`<h3>${esc(u.n)}</h3><button onclick="up('${i}')">Cambiar PIN</button>${u.role!='admin'?`<button class=d onclick="ud('${i}')">Eliminar</button>`:''}<button onclick=cls()>Cerrar</button>`)}
+function up(i){form('Nuevo PIN',[{k:'p',l:'PIN',t:'password'}],async v=>{if(v.p.length<4)return alert('Mínimo 4 dígitos')||false;S.users.find(x=>x.id==i).pin=await h(v.p);save()})}
+function ud(i){if(confirm('¿Eliminar vendedor? Sus ventas quedan en el historial.')){S.users=S.users.filter(u=>u.id!=i);save();cls();render()}}
+
+/* ---------- Render ---------- */
+function render(){const a=$('#app');if(!S)return a.innerHTML=setup();if(!U)return a.innerHTML=login();
+  const T=[['home','🏠','Inicio'],['sell','🛒','Vender'],['prod','📦','Productos'],['cli','👥','Clientes'],['tur','📅','Turnos'],['more','☰','Más']],base=['buy','usr','hist'].includes(tab)?'more':tab;
+  a.innerHTML=(S.mod>bk?'<div class=bn onclick=backup()>'+(bk&&(Date.now()-bk)>864e5?'Hace '+Math.floor((Date.now()-bk)/864e5)+' día(s) sin copia. ':'')+'Hay cambios sin guardar en archivo. Tocá para guardar.</div>':'')+'<main>'+V[tab]()+'</main><nav>'+T.map(t=>`<a class="${t[0]==base?'on':''}" onclick="tab='${t[0]}';render()"><span>${t[1]}</span>${t[2]}</a>`).join('')+'</nav>'}
+(async()=>{try{S=await idb('readonly','s');fh=await idb('readonly','fh');bk=await idb('readonly','bk')||0;ad=await idb('readonly','ad')||'';navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}render()})();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script></body></html>
